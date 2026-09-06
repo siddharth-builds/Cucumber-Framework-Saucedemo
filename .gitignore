@@ -1,4 +1,5 @@
 target/
+test-output/
 *.class
 .settings/
 .classpath
