@@ -25,8 +25,22 @@ public class DriverFactory {
             options.addArguments("--disable-save-password-bubble");
             options.addArguments("--disable-notifications");
 
+            // Check if running in GitHub Actions environment
+            boolean isCI = System.getenv("GITHUB_ACTIONS") != null && System.getenv("GITHUB_ACTIONS").equals("true");
+
+            if (isCI) {
+                options.addArguments("--headless=new");
+                options.addArguments("--no-sandbox");
+                options.addArguments("--disable-dev-shm-usage");
+                options.addArguments("--window-size=1920,1080");
+            }
+
             WebDriver initDriver = new ChromeDriver(options);
-            initDriver.manage().window().maximize();
+
+            if (!isCI) {
+                initDriver.manage().window().maximize();
+            }
+
             initDriver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
             driver.set(initDriver);
         }
